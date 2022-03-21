@@ -14,7 +14,7 @@ router.post('/register', validateBody(RegisterDto), async (req, res) => {
   const password = await pwd.hash(req.body.password);
 
   try {
-    const user = await prismaService.user.create({ data: { email: req.body.email, password } });
+    const user = await prismaService.user.create({ data: { username: req.body.username, password } });
 
     res.json({ access_token: sign(user) });
   } catch (error) {
@@ -24,7 +24,7 @@ router.post('/register', validateBody(RegisterDto), async (req, res) => {
 });
 
 router.post('/login', validateBody(LoginDto), async (req, res) => {
-  const user = await prismaService.user.findUnique({ where: { email: req.body.email } });
+  const user = await prismaService.user.findUnique({ where: { username: req.body.username } });
   if (!user) return res.sendStatus(httpStatus.UNAUTHORIZED);
 
   const pwdMatch = await pwd.compare(req.body.password, user.password);

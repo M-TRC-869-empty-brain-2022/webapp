@@ -4,8 +4,8 @@ import * as bcrypt from 'bcryptjs';
 
 import { jwtConstants } from '../constants';
 
-export const sign = ({ email, id }: User) =>
-  jwt.sign({ email: email, sub: id }, jwtConstants.secret, { expiresIn: '1d' });
+export const sign = ({ username, id }: User) =>
+  jwt.sign({ username, sub: id }, jwtConstants.secret, { expiresIn: '1d' });
 
 export const pwd = {
   hash: (pwd: string) => bcrypt.hash(pwd, 10),
