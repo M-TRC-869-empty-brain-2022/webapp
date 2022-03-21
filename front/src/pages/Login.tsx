@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useCallback, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { user } from '../recoil/atom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface LoginProps {}
 
@@ -15,6 +17,10 @@ function Login(props: LoginProps) {
     const onSubmit: React.FormEventHandler<HTMLFormElement> = useCallback((e) => {
         e.preventDefault();
 
+        if (username.length > 20 || username.length < 6 || password.length > 20 || password.length < 6) {
+            toast.error("Your username and your password length should be contained between 6 and 20 characters");
+            return;
+        }
         setAuth({
             username: username,
             id: username,

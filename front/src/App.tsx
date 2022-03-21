@@ -14,6 +14,7 @@ import NotFound from './pages/NotFound';
 import Register from './pages/Register';
 import User from './pages/User';
 import { user } from './recoil/atom';
+import { ToastContainer, toast } from 'react-toastify';
 
 function AuthRoute()  {
   const auth = useRecoilValue(user);
@@ -54,6 +55,7 @@ function App() {
   return (
     <RecoilRoot>
       <Navigation />
+      <ToastContainer />
     </RecoilRoot>
   );
 }
