@@ -1,11 +1,8 @@
 import styled from 'styled-components';
-import {Progress, TodoList} from "src/network/apiTypes";
-import {useRecoilValue} from "recoil";
-import {user} from "src/recoil/atom";
-import {useCallback, useEffect, useState} from "react";
-import {ArrowForwardOutline} from "react-ionicons";
+import { TodoList } from "src/network/apiTypes";
+import { useCallback } from "react";
+import { ArrowForwardOutline } from "react-ionicons";
 import { v4 as uuid } from 'uuid';
-import {useNavigate} from "react-router-dom";
 
 interface SidebarProps {
     onChange: (todo: TodoList) => void;

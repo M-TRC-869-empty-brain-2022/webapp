@@ -13,7 +13,7 @@ function Logout() {
     const onLogout = useCallback(() => {
         setAuth(undefined);
         navigate('/login');
-    }, [navigate]);
+    }, [navigate, setAuth]);
     
     return <StyledLogout onClick={onLogout}>
         Log-out
@@ -30,11 +30,7 @@ const StyledLogout = styled.div`
     color: red;
 `
 
-interface UserProps {
-
-}
-
-function User(props: UserProps) {
+function User() {
     const { username } = useParams();
 
     return <StyledUser>

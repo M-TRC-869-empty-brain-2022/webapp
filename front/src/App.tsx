@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,7 +14,7 @@ import NotFound from './pages/NotFound';
 import Register from './pages/Register';
 import User from './pages/User';
 import { user } from './recoil/atom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 function AuthRoute()  {
   const auth = useRecoilValue(user);
