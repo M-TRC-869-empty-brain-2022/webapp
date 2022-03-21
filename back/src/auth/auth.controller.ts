@@ -4,9 +4,9 @@ import httpStatus from 'http-status-codes';
 
 import { prismaService } from '../prisma/prisma.service';
 import { validateBody } from '../middleware/validate';
+import { pwd, sign } from '../passport/jwt.service';
 
 import { LoginDto, RegisterDto } from './auth.dto';
-import { pwd, sign } from 'passport/jwt.service';
 
 const router = Router();
 
