@@ -1,16 +1,20 @@
 import styled from 'styled-components';
 import Logo from './Logo';
 import Bubble from './Profile/Bubble';
+import { useRecoilValue } from 'recoil';
+import { user } from '../recoil/atom';
 
 interface HeaderProps {
 
 }
 
 function Header(props: HeaderProps) {
+    const auth = useRecoilValue(user);
+
     return (
         <StyledHeader>
             <Logo />
-            <Bubble username='undefined' />
+            <Bubble username={auth?.username || 'error'} />
         </StyledHeader>
     );
 }

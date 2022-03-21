@@ -1,21 +1,32 @@
 import styled from 'styled-components';
 import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { user } from '../recoil/atom';
 
 interface LoginProps {}
 
 function Login(props: LoginProps) {
-    const onSubmit = useCallback((e) => {
+    const setAuth = useSetRecoilState(user);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    
+    const onSubmit: React.FormEventHandler<HTMLFormElement> = useCallback((e) => {
         e.preventDefault();
-    }, [])
+
+        setAuth({
+            username: username,
+            id: username,
+        })
+    }, [username, password, setAuth])
 
     return <StyledLogin>
         <Modal>
             <Logo noRedirect />
             <Form onSubmit={onSubmit}>
-                <Input placeholder='username'/>
-                <Input placeholder='password' type={'password'} />
+                <Input placeholder='username' name={'username'} onChange={(e) => setUsername(e.target.value)} />
+                <Input placeholder='password' type={'password'} name={'password'} onChange={(e) => setPassword(e.target.value)} />
                 <Button type='submit'>Login</Button>
             </Form>
             <Link to={'/register'}>Don't have an account? Register.</Link>

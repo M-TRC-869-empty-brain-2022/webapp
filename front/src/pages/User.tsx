@@ -3,11 +3,15 @@ import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Body from '../components/Body';
+import { useSetRecoilState } from 'recoil';
+import { user } from '../recoil/atom';
 
 function Logout() {
     const navigate = useNavigate();
+    const setAuth = useSetRecoilState(user);
 
     const onLogout = useCallback(() => {
+        setAuth(undefined);
         navigate('/login');
     }, [navigate]);
     
