@@ -27,6 +27,7 @@ const StyledHeader = styled.div`
     align-items: center;
     box-sizing: border-box;
     background-color: white;
+    border-bottom: 1px solid #e3e3e3;
 `
 
 export default Header;
