@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+model User {
+  id   String @id @default(uuid())
+  role Role   @default(USER)
+
+  username String @unique
+  password String
+
+  todos TodoList[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TodoList {
+  id String @id @default(uuid())
+
+  name        String
+  description String
+  shared      Boolean @default(false)
+
+  tasks Task[]
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) // delete lists with user
+  userId String
+}
+
+model Task {
+  id String @id @default(uuid())
+
+  name String
+
+  progress PROGRESS @default(TODO)
+
+  todoList   TodoList @relation(fields: [todoListId], references: [id], onDelete: Cascade) // delete tasks with list
+  todoListId String
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum PROGRESS {
+  TODO
+  IN_PROGRESS
+  DONE
+}

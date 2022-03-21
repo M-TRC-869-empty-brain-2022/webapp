@@ -1,0 +1,45 @@
+{
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node dist/index.js",
+    "dev": "ts-node-dev src/index.ts",
+    "migrate": "prisma migrate dev",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.11.0",
+    "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.5.1",
+    "class-transformer-validator": "^0.9.1",
+    "class-validator": "^0.13.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "env-var": "^7.1.1",
+    "eslint": "^8.11.0",
+    "express": "^4.17.3",
+    "http-status-codes": "^2.2.0",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
+    "prisma": "^3.11.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/body-parser": "^1.19.2",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/http-status-codes": "^1.2.0",
+    "@types/node": "^17.0.21",
+    "@types/passport": "^1.0.7",
+    "@types/passport-jwt": "^3.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.0"
+  }
+}
