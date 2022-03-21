@@ -17,11 +17,43 @@ model User {
   username String @unique
   password String
 
+  todos TodoList[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model TodoList {
+  id String @id @default(uuid())
+
+  name        String
+  description String
+  shared      Boolean @default(false)
+
+  tasks Task[]
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+model Task {
+  id String @id @default(uuid())
+
+  name String
+
+  progress PROGRESS @default(TODO)
+
+  TodoList   TodoList? @relation(fields: [todoListId], references: [id])
+  todoListId String?
 }
 
 enum Role {
   ADMIN
   USER
+}
+
+enum PROGRESS {
+  TODO
+  IN_PROGRESS
+  DONE
 }
