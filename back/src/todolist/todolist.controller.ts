@@ -14,7 +14,7 @@ const select = {
   description: true,
   name: true,
   shared: true,
-  User: { select: { username: true } },
+  user: { select: { username: true } },
   tasks: true,
 } as const;
 

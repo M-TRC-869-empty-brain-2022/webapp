@@ -32,8 +32,8 @@ model TodoList {
 
   tasks Task[]
 
-  User   User?   @relation(fields: [userId], references: [id], onDelete: Cascade) // delete lists with user
-  userId String?
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) // delete lists with user
+  userId String
 }
 
 model Task {
@@ -43,8 +43,8 @@ model Task {
 
   progress PROGRESS @default(TODO)
 
-  TodoList   TodoList? @relation(fields: [todoListId], references: [id], onDelete: Cascade) // delete tasks with list
-  todoListId String?
+  todoList   TodoList @relation(fields: [todoListId], references: [id], onDelete: Cascade) // delete tasks with list
+  todoListId String
 }
 
 enum Role {
