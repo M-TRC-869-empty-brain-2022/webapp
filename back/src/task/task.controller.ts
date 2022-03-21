@@ -12,7 +12,7 @@ const router = Router();
 const select = { id: true, name: true, progress: true } as const;
 
 router.post(
-  ':todolistId',
+  '/:todolistId',
   validateBody(CreateTaskDto),
   passport.authenticate('jwt', { session: false }),
   forward<CreateTaskDto>(async (req, res, body, user) => {
@@ -32,12 +32,11 @@ router.post(
 );
 
 router.put(
-  ':id',
+  '/:id',
   validateBody(UpdateTaskDto),
   passport.authenticate('jwt', { session: false }),
   forward<UpdateTaskDto>(async (req, res, body, user) => {
     const { id } = req.params;
-
     const task = await prismaService.task.findUnique({
       where: { id },
       select: { todoList: { select: { user: { select: { id: true } } } } },
@@ -57,7 +56,7 @@ router.put(
 );
 
 router.delete(
-  ':id',
+  '/:id',
   passport.authenticate('jwt', { session: false }),
   forward(async (req, res, body, user) => {
     const { id } = req.params;

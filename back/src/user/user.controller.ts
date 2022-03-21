@@ -12,7 +12,7 @@ import { ResetPwdDto } from './user.dto';
 const router = Router();
 
 router.post(
-  'reset-pwd',
+  '/reset-pwd',
   validateBody(ResetPwdDto),
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {

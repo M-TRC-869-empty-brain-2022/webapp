@@ -19,7 +19,7 @@ const select = {
 } as const;
 
 router.get(
-  '',
+  '/',
   passport.authenticate('jwt', { session: false }),
   forward(async (req, res, body, user) => {
     const lists = await prismaService.todoList.findMany({ where: { userId: user.id }, select });
@@ -29,7 +29,7 @@ router.get(
 );
 
 router.get(
-  ':id',
+  '/:id',
   passport.authenticate('jwt', { session: false }),
   forward(async (req, res, body, user) => {
     const { id } = req.params;
@@ -47,7 +47,7 @@ router.get(
 );
 
 router.post(
-  '',
+  '/',
   validateBody(CreateTodoListDto),
   passport.authenticate('jwt', { session: false }),
   forward<CreateTodoListDto>(async (req, res, body, user) => {
@@ -61,7 +61,7 @@ router.post(
 );
 
 router.put(
-  ':id',
+  '/:id',
   validateBody(UpdateTodoListDto),
   passport.authenticate('jwt', { session: false }),
   forward<UpdateTodoListDto>(async (req, res, body, user) => {
@@ -82,7 +82,7 @@ router.put(
 );
 
 router.delete(
-  ':id',
+  '/:id',
   passport.authenticate('jwt', { session: false }),
   forward(async (req, res, body, user) => {
     const { id } = req.params;
