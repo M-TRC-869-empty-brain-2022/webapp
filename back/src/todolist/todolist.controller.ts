@@ -5,6 +5,7 @@ import httpStatus from 'http-status-codes';
 import { prismaService } from '../prisma/prisma.service';
 import { validateBody } from '../middleware/validate';
 import { forward } from '../utils/request';
+import { select as taskSelect } from '../task/task.controller';
 
 import { CreateTodoListDto, UpdateTodoListDto } from './todolist.dto';
 
@@ -15,7 +16,7 @@ const select = {
   name: true,
   shared: true,
   user: { select: { username: true } },
-  tasks: true,
+  tasks: { select: taskSelect },
 } as const;
 
 router.get(
