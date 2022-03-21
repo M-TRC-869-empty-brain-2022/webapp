@@ -8,6 +8,7 @@ import 'dotenv/config';
 import { appConstants } from './constants';
 import authRoutes from './auth/auth.controller';
 import userRoutes from './user/user.controller';
+import todoRoutes from './todolist/todolist.controller';
 import JWTLoginStrategy from './passport/jwt.strategy';
 
 const app = express();
@@ -21,5 +22,6 @@ passport.use(JWTLoginStrategy);
 app.get('/health', (_, res) => res.json({ status: 'healthy' }));
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/todo', todoRoutes);
 
 app.listen(appConstants.PORT, () => console.log(`Server is running on port ${appConstants.PORT}`));
