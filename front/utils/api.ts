@@ -36,6 +36,7 @@ type TaskType = {
 };
 
 type CreateTaskRequest = Pick<TaskType, 'name'>;
+type UpdateTaskRequest = Pick<TaskType, 'name' | 'progress'>;
 
 class Api {
   instance: AxiosInstance;
@@ -111,9 +112,11 @@ class Api {
   createTask = (todolistId: string, data: CreateTaskRequest): Promise<TaskType> =>
     this.instance.post<TaskType>(`/task/${todolistId}`, data).then((res) => res.data);
 
-  // updatetask
+  updatetask = (taskId: string, data: UpdateTaskRequest): Promise<TaskType> =>
+    this.instance.put<TaskType>(`/task/${taskId}`, data).then((res) => res.data);
 
-  // deleteTask
+  deleteTask = (taskId: string): Promise<void> =>
+    this.instance.delete<void>(`/task/${taskId}`).then((res) => res.data);
 }
 
 export default new Api();
