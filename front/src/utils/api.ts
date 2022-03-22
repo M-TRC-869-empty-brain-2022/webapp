@@ -1,7 +1,14 @@
 import axios, { AxiosInstance } from 'axios';
 
 // todo replace with correct var from env.
-const backendUrl = 'http://localhost:8080';
+const backendUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+
+console.log('backend url', backendUrl)
+
+type User = {
+  id: string;
+  username: string;
+}
 
 type AuthResponse = {
   access_token: string;
@@ -17,7 +24,7 @@ type ChangePasswordRequest = {
   newPassword: string;
 };
 
-type TodolistType = {
+export type TodolistType = {
   id: string;
   description: string;
   name: string;
@@ -29,10 +36,12 @@ type TodolistType = {
 type CreateTodolistRequest = Pick<TodolistType, 'name' | 'description'>;
 type UpdateTodolistRequest = Pick<TodolistType, 'name' | 'description' | 'shared'>;
 
-type TaskType = {
+export type Progress = 'TODO' | 'IN_PROGRESS' | 'DONE'
+
+export type TaskType = {
   id: string;
   name: string;
-  progress: 'TODO' | 'IN_PROGRESS' | 'DONE';
+  progress: Progress;
 };
 
 type CreateTaskRequest = Pick<TaskType, 'name'>;
@@ -53,7 +62,7 @@ class Api {
 
   setHeaderToken(token: string | null) {
     this.instance.defaults.headers.common.Authorization = `Bearer ${token}`;
-    localStorage.setItem('token', token);
+    localStorage.setItem('token', token || '');
   }
 
   unsetHeaderToken() {
@@ -84,7 +93,10 @@ class Api {
       .then(({ access_token }) => this.setHeaderToken(access_token));
 
   changePassword = (data: ChangePasswordRequest): Promise<void> =>
-    this.instance.post('/user/reset-pwd', data);
+      this.instance.post('/user/reset-pwd', data);
+
+  profile = (): Promise<User> =>
+      this.instance.get('/profile-tmp-not-secure');
 
   //
   // TodoList

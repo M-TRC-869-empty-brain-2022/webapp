@@ -6,6 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import { user } from '../recoil/atom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Api from "src/utils/api";
 
 interface LoginProps {}
 
@@ -14,13 +15,24 @@ function Login(props: LoginProps) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     
-    const onSubmit: React.FormEventHandler<HTMLFormElement> = useCallback((e) => {
+    const onSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(async (e) => {
         e.preventDefault();
 
         if (username.length > 20 || username.length < 6 || password.length > 20 || password.length < 6) {
             toast.error("Your username and your password length should be contained between 6 and 20 characters");
             return;
         }
+
+        try {
+            const user = await Api.login({username, password});
+
+            console.log(user);
+        } catch (e) {
+            // @ts-ignore
+            toast.error(e.message);
+            return;
+        }
+
         setAuth({
             username: username,
             id: username,

@@ -1,22 +1,49 @@
 import styled from 'styled-components';
 import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
-import { useCallback } from 'react';
+import {useCallback, useState} from 'react';
+import {toast} from "react-toastify";
+import Api from "src/utils/api";
 
 interface RegisterProps {}
 
 function Register(props: RegisterProps) {
-    const onSubmit = useCallback((e) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordC, setPasswordC] = useState('');
+
+    const onSubmit = useCallback(async (e) => {
         e.preventDefault();
-    }, [])
+
+        if (username.length > 20 || username.length < 6 || password.length > 20 || password.length < 6) {
+            toast.error("Your username and your password length should be contained between 6 and 20 characters");
+            return;
+        }
+
+        if (password !== passwordC) {
+            toast.error("The password and the confirmation doesn't match");
+            return;
+        }
+
+        try {
+            await Api.register({username, password});
+        } catch (e) {
+            // @ts-ignore
+            toast.error(e.message);
+            return;
+        }
+
+        toast.success("All good!");
+
+    }, [username, password, passwordC])
 
     return <StyledRegister>
         <Modal>
             <Logo noRedirect />
             <Form onSubmit={onSubmit}>
-                <Input placeholder='username'/>
-                <Input placeholder='password' type={'password'} />
-                <Input placeholder='confirm password' type={'password'} />
+                <Input placeholder='username' name={'username'} onChange={(e) => setUsername(e.target.value)} />
+                <Input placeholder='password' type={'password'} name={'password'} onChange={(e) => setPassword(e.target.value)} />
+                <Input placeholder='confirm password' type={'password'} name={'password'} onChange={(e) => setPasswordC(e.target.value)} />
                 <Button type='submit'>Register</Button>
             </Form>
             <Link to={'/register'}>Don't have an account? Register.</Link>

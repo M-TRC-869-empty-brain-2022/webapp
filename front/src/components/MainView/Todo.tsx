@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import {useCallback, useEffect, useState} from "react";
-import {Progress, Task} from 'src/network/apiTypes';
 import {ShareSocialOutline, TrashOutline} from 'react-ionicons'
-import { v4 as uuid } from 'uuid';
+import Api, {TaskType, Progress} from "src/utils/api";
+import {toast} from "react-toastify";
 
 function ProgressView({ progress }: { progress: Progress }) {
-    return <StyledProgress style={{ backgroundColor: ['#03c2fc', '#e8cd33', '#336ce8'][progress] }}>{['todo', 'doing', 'done'][progress]}</StyledProgress>
+    return <StyledProgress style={{ backgroundColor: {TODO: '#03c2fc', IN_PROGRESS: '#e8cd33', DONE: '#336ce8'}[progress] }}>{{TODO:'todo', IN_PROGRESS: 'doing', DONE: 'done'}[progress]}</StyledProgress>
 }
 
 const StyledProgress = styled.div`
@@ -16,7 +16,27 @@ const StyledProgress = styled.div`
   align-items: center;
 `
 
-function TaskView({ id, name, progress }: Task) {
+interface TaskViewProps {
+    task: TaskType;
+    setTasks: React.Dispatch<React.SetStateAction<TaskType[] | undefined>>;
+}
+
+function TaskView({ task: { id, name, progress }, setTasks }: TaskViewProps) {
+    const onClick = useCallback(() => {
+        const deleteTask = async () => {
+            try {
+                await Api.deleteTask(id);
+
+                setTasks((old) => old?.filter((t) => t.id !== id));
+            } catch (e) {
+                // @ts-ignore
+                toast.error(e.message);
+            }
+        }
+
+        deleteTask();
+    }, [id, setTasks]);
+
     return <StyledTask>
         <TaskTitle>{name}</TaskTitle>
         <ProgressView progress={progress} />
@@ -24,6 +44,8 @@ function TaskView({ id, name, progress }: Task) {
             color={'#00000'}
             height="25px"
             width="25px"
+            onClick={onClick}
+            style={{ cursor: 'pointer' }}
         />
     </StyledTask>
 }
@@ -52,49 +74,68 @@ interface TodoProps {
     description: string;
 }
 
-function getProgressPercent(tasks: Task[] | undefined) {
+function getProgressPercent(tasks: TaskType[] | undefined) {
     if (!tasks || tasks.length === 0) {
         return 0;
     }
-    return Math.floor((tasks.reduce((acc, c) => acc + (c.progress === Progress.DONE ? 1 : 0), 0) / tasks.length) * 100)
+    return Math.floor((tasks.reduce((acc, c) => acc + (c.progress === 'DONE' ? 1 : 0), 0) / tasks.length) * 100)
 }
 
 function Todo({ id, name, description }: TodoProps) {
-    const [tasks, setTasks] = useState<Task[] | undefined>(undefined);
+    const [tasks, setTasks] = useState<TaskType[] | undefined>(undefined);
 
     useEffect(() => {
-        const defaultTask = () => ({ id: uuid(), name: 'this is a todo task', progress: Progress.TODO });
+        const fetchTasks = async () => {
+            const list = await Api.getTodoListById(id);
 
-        setTasks([
-            defaultTask(),
-            {...defaultTask(), progress: Progress.DOING},
-            {...defaultTask(), progress: Progress.DOING},
-            {...defaultTask(), progress: Progress.DOING},
-            {...defaultTask(), progress: Progress.DONE},
-            {...defaultTask(), progress: Progress.DONE},
-        ])
+            try {
+                setTasks(list.tasks.reverse());
+            } catch (e) {
+                // @ts-ignore
+                toast.error(e.message);
+            }
+        }
+
+        fetchTasks();
     }, [id]);
 
     const addTask = useCallback(() => {
-        const taskName = prompt('Task name:');
+        const name = prompt('Task name:');
 
-        if (taskName) {
-            const task = {id: uuid(), name: taskName, progress: Progress.TODO};
+        if (name) {
+            const createTask = async () => {
+                try {
+                    const task = await Api.createTask(id, {name});
 
-            setTasks((old) => [task, ...(old || [])]);
+                    setTasks((old) => [task, ...(old || [])])
+                } catch (e) {
+                    // @ts-ignore
+                    toast.error(e.message);
+                }
+            }
+
+            createTask();
         }
-    }, [])
+    }, [id])
 
     return <StyledTodo>
         <TodoHeader>
             <TodoMeta>
                 <TodoTitle>{name}</TodoTitle>
                 <TodoDescription>{description}</TodoDescription>
-                {tasks && tasks.length !== 0 &&
-                    <TodoInfos>
-                        <TodoProgress>{ getProgressPercent(tasks) }% done { getProgressPercent(tasks) === 100 ? '🎉' : '' }</TodoProgress>
-                    </TodoInfos>
-                }
+                <TodoInfos>
+                    <TodoProgress>
+                        { !tasks ?
+                            ( 'Loading...' ) :
+                            ( tasks.length === 0 ? (
+                                    'No tasks'
+                                ) : (
+                                    `${getProgressPercent(tasks)}% done ${ getProgressPercent(tasks) === 100 ? '🎉' : ''}`
+                                )
+                            )
+                        }
+                    </TodoProgress>
+                </TodoInfos>
             </TodoMeta>
             <TodoAction>
                 <TrashOutline
@@ -115,15 +156,7 @@ function Todo({ id, name, description }: TodoProps) {
                 New task +
             </AddButton>
         </AddButtonContainer>
-        {!tasks ? (
-            <div>Loading...</div>
-        ) : (
-            tasks.length === 0 ? (
-                <div>No tasks!</div>
-            ) : (
-                tasks.map((task, i) => <TaskView key={i} {...task} />)
-            )
-        )}
+        {tasks && tasks.length !== 0 && tasks.map((task) => <TaskView key={task.id} task={task} setTasks={setTasks} />)}
     </StyledTodo>
 }
 

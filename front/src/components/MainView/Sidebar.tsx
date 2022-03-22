@@ -1,16 +1,16 @@
 import styled from 'styled-components';
-import { TodoList } from "src/network/apiTypes";
 import { useCallback } from "react";
 import { ArrowForwardOutline } from "react-ionicons";
 import { v4 as uuid } from 'uuid';
+import Api, {TodolistType} from "src/utils/api";
 
 interface SidebarProps {
-    onChange: (todo: TodoList) => void;
-    lists: TodoList[] | undefined;
-    setLists:  React.Dispatch<React.SetStateAction<TodoList[] | undefined>>;
+    onChange: (todo: TodolistType) => void;
+    lists: TodolistType[] | undefined;
+    setLists:  React.Dispatch<React.SetStateAction<TodolistType[] | undefined>>;
 }
 
-function ListView({ onChange, ...infos }: TodoList & SidebarProps) {
+function ListView({ onChange, ...infos }: TodolistType & SidebarProps) {
     return <StyledListView onClick={() => onChange(infos)}>
         <ListName>
             {infos.name}
@@ -44,9 +44,13 @@ function Sidebar({onChange, lists, setLists}: SidebarProps) {
             const description = prompt(`${name}'s description`);
 
             if (description) {
-                const task = {id: uuid(), name, description, tasks: []};
+                const createList = async () => {
+                    const list = await Api.createTodoList({ name, description });
 
-                setLists((old) => [task, ...(old || [])]);
+                    setLists((old) => [list, ...(old || [])])
+                }
+
+                createList();
             }
         }
     }, [setLists])
@@ -61,7 +65,7 @@ function Sidebar({onChange, lists, setLists}: SidebarProps) {
                     {lists.length === 0 ? (
                         <div>No lists</div>
                     ) : (
-                        lists.map((list) => <ListView {...list} onChange={onChange} lists={lists} setLists={setLists} />)
+                        lists.map((list) => <ListView key={list.id} {...list} onChange={onChange} lists={lists} setLists={setLists} />)
                     )}
                 </List>
             </>

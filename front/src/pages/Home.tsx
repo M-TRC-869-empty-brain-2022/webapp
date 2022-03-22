@@ -3,32 +3,34 @@ import Header from '../components/Header';
 import Todo from "src/components/MainView/Todo";
 import Sidebar from "src/components/MainView/Sidebar";
 import {useEffect, useState} from "react";
-import {TodoList} from "src/network/apiTypes";
 import {useNavigate, useParams} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {user} from "src/recoil/atom";
 import {v4 as uuid} from "uuid";
+import Api, { TodolistType } from "src/utils/api";
+import {toast} from "react-toastify";
 
 interface HomeProps {}
 
 function Home(props: HomeProps) {
     const navigate = useNavigate();
     const auth = useRecoilValue(user);
-    const [lists, setLists] = useState<TodoList[] | undefined>(undefined);
+    const [lists, setLists] = useState<TodolistType[] | undefined>(undefined);
     const { list } = useParams();
 
     useEffect(() => {
-        const defaultList = () => ({ name: 'List', description: 'This is a description to the todo lol', id: uuid(), tasks: [] })
+        const fetchLists = async () => {
+            const lists = await Api.getUserTodoLists();
 
-        setLists([
-            defaultList(),
-            { ...defaultList(), name: 'List2' },
-            { ...defaultList(), name: 'List3' },
-            { ...defaultList(), name: 'List4' },
-            { ...defaultList(), name: 'List5' },
-            { ...defaultList(), name: 'List6' },
-            { ...defaultList(), name: 'List7' },
-        ])
+            try {
+                setLists(lists);
+            } catch (e) {
+                // @ts-ignore
+                toast.error(e.message);
+            }
+        }
+
+        fetchLists();
     }, [auth])
 
     return (
