@@ -87,22 +87,22 @@ class Api {
     this.instance.post('/user/reset-pwd', data);
 
   //
-  // Todolist
+  // TodoList
   //
 
-  createTodolist = (data: CreateTodolistRequest): Promise<TodolistType> =>
+  createTodoList = (data: CreateTodolistRequest): Promise<TodolistType> =>
     this.instance.post<TodolistType>('/todo', data).then((res) => res.data);
 
-  getUserTodolists = (): Promise<Array<TodolistType>> =>
+  getUserTodoLists = (): Promise<Array<TodolistType>> =>
     this.instance.get<Array<TodolistType>>('/todo').then((res) => res.data);
 
-  getTodolistById = (todolistId: string): Promise<TodolistType> =>
+  getTodoListById = (todolistId: string): Promise<TodolistType> =>
     this.instance.get<TodolistType>(`/todo/${todolistId}`).then((res) => res.data);
 
-  updateTodolist = (todolistId: string, data: UpdateTodolistRequest): Promise<TodolistType> =>
+  updateTodoList = (todolistId: string, data: UpdateTodolistRequest): Promise<TodolistType> =>
     this.instance.put<TodolistType>(`/todo/${todolistId}`, data).then((res) => res.data);
 
-  deleteTodolist = (todolistId: string): Promise<void> =>
+  deleteTodoList = (todolistId: string): Promise<void> =>
     this.instance.delete<void>(`/todo/${todolistId}`).then((res) => res.data);
 
   //
@@ -112,7 +112,7 @@ class Api {
   createTask = (todolistId: string, data: CreateTaskRequest): Promise<TaskType> =>
     this.instance.post<TaskType>(`/task/${todolistId}`, data).then((res) => res.data);
 
-  updatetask = (taskId: string, data: UpdateTaskRequest): Promise<TaskType> =>
+  updateTask = (taskId: string, data: UpdateTaskRequest): Promise<TaskType> =>
     this.instance.put<TaskType>(`/task/${taskId}`, data).then((res) => res.data);
 
   deleteTask = (taskId: string): Promise<void> =>
