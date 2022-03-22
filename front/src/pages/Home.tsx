@@ -6,7 +6,6 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {user} from "src/recoil/atom";
-import {v4 as uuid} from "uuid";
 import Api, { TodolistType } from "src/utils/api";
 import {toast} from "react-toastify";
 

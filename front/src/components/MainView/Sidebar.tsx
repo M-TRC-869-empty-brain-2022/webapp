@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { useCallback } from "react";
 import { ArrowForwardOutline } from "react-ionicons";
-import { v4 as uuid } from 'uuid';
 import Api, {TodolistType} from "src/utils/api";
 
 interface SidebarProps {
