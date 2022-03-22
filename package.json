@@ -1,7 +1,7 @@
 {
     "scripts": {
       "heroku-prebuild": "cd back && npm install && npm run build && cd ..",
-      "start": "cd back && npm start"
+      "start": "cd back && npm i && npm start"
     }
   }
   
