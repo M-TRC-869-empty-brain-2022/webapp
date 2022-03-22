@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,7 +14,7 @@ import NotFound from './pages/NotFound';
 import Register from './pages/Register';
 import User from './pages/User';
 import { user } from './recoil/atom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 function AuthRoute()  {
   const auth = useRecoilValue(user);
@@ -41,8 +41,8 @@ function Navigation() {
       <Route path='/' element={<HomeRoute />}>
         <Route path='/' element={<Home />} />
       </Route>
-      <Route path='/:file' element={<HomeRoute />}>
-        <Route path='/:file' element={<NotFound />} />
+      <Route path='/list/:list' element={<HomeRoute />}>
+        <Route path='/list/:list' element={<Home />} />
       </Route>
 
       <Route path='/user/:username' element={<User />} />
@@ -53,10 +53,12 @@ function Navigation() {
 
 function App() {
   return (
-    <RecoilRoot>
-      <Navigation />
-      <ToastContainer />
-    </RecoilRoot>
+    <div style={{ height: '100%' }}>
+      <RecoilRoot>
+        <Navigation />
+        <ToastContainer />
+      </RecoilRoot>
+    </div>
   );
 }
 
