@@ -9,7 +9,7 @@ import { forward } from '../utils/request';
 import { CreateTaskDto, UpdateTaskDto } from './task.dto';
 
 const router = Router();
-const select = { id: true, name: true, progress: true } as const;
+export const select = { id: true, name: true, progress: true } as const;
 
 router.post(
   '/:todolistId',
