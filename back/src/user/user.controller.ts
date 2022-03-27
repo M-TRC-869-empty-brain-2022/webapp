@@ -7,7 +7,7 @@ import { prismaService } from '../prisma/prisma.service';
 import { validateBody } from '../middleware/validate';
 import { forward } from '../utils/request';
 
-import { ResetPwdDto } from './user.dto';
+import { ResetPwdDto, UpdateProfilePicture } from './user.dto';
 
 const router = Router();
 
@@ -29,8 +29,18 @@ router.post(
 router.get(
   '/me',
   passport.authenticate('jwt', { session: false }),
-  forward((req, res, body, { id, username, role }) => {
-    res.json({ id, username, role });
+  forward((req, res, body, { id, username, role, profilePicture }) => {
+    res.json({ id, username, role, profilePicture });
+  }),
+);
+
+router.post(
+  '/profilePicture',
+  validateBody(UpdateProfilePicture),
+  passport.authenticate('jwt', { session: false }),
+  forward<UpdateProfilePicture>(async (req, res, body, user) => {
+    await prismaService.user.update({ where: { id: user.id }, data: { profilePicture: body.profilePictureBase64 } });
+    res.end();
   }),
 );
 

@@ -15,6 +15,7 @@ export type User = {
   id: string;
   role: Role;
   username: string;
+  profilePicture?: string;
 };
 
 type AuthResponse = {
@@ -29,6 +30,10 @@ type AuthRequest = {
 type ChangePasswordRequest = {
   oldPassword: string;
   newPassword: string;
+};
+
+type ChangeProfilePictureeRequest = {
+  profilePicture: string;
 };
 
 //
@@ -106,6 +111,9 @@ class Api {
 
   changePassword = (data: ChangePasswordRequest): Promise<void> =>
     this.instance.post('/user/reset-pwd', data);
+
+  changeProfilePicture = (data: ChangeProfilePictureeRequest): Promise<void> =>
+    this.instance.post('/user/profilePicture', data);
 
   profile = (): Promise<User> => this.instance.get<User>('/user/me').then((res) => res.data);
 
