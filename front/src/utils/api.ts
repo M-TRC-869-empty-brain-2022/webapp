@@ -135,7 +135,7 @@ class Api {
     this.instance.get<TodolistType>(`/todo/${todolistId}`).then((res) => res.data);
 
   getPublicTodoListById = (todolistId: string): Promise<TodolistType> =>
-    this.instance.get<TodolistType>(`/todo/${todolistId}`).then((res) => res.data);
+    this.instance.get<TodolistType>(`/todo/public/${todolistId}`).then((res) => res.data);
 
   updateTodoList = (todolistId: string, data: UpdateTodolistRequest): Promise<TodolistType> =>
     this.instance.put<TodolistType>(`/todo/${todolistId}`, data).then((res) => res.data);
