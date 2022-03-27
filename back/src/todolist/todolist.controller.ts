@@ -10,7 +10,7 @@ import { select as taskSelect } from '../task/task.controller';
 import { CreateTodoListDto, UpdateTodoListDto } from './todolist.dto';
 
 const router = Router();
-const select = {
+export const select = {
   id: true,
   description: true,
   name: true,
@@ -40,12 +40,21 @@ router.get(
 
     const { userId, ...list } = maybeList;
 
-    // doesn't belong to you, only allow if shared
-    if (userId !== user.id && !list.shared) return res.sendStatus(httpStatus.FORBIDDEN);
+    if (userId !== user.id) return res.sendStatus(httpStatus.FORBIDDEN);
 
     res.json(list);
   }),
 );
+
+router.get('public/:id', async (req, res) => {
+  const { id } = req.params;
+  const list = await prismaService.todoList.findUnique({ where: { id }, select: { ...select } });
+
+  if (!list) return res.sendStatus(httpStatus.NOT_FOUND);
+  if (!list.shared) return res.sendStatus(httpStatus.FORBIDDEN);
+
+  res.json(list);
+});
 
 router.post(
   '/',

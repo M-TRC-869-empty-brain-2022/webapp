@@ -1,21 +1,22 @@
 import axios, { AxiosInstance } from 'axios';
 
-// todo replace with correct var from env.
 const backendUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
+//
+// Auth
+//
+
 enum Role {
-  USER = "USER",
-  ADMIN = "ADMIN"
-};
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
 
 export type User = {
-  createdAt: Date;
   id: string;
-  password: string;
   role: Role;
-  updatedAt: Date;
   username: string;
-}
+  profilePicture?: string;
+};
 
 type AuthResponse = {
   access_token: string;
@@ -31,6 +32,14 @@ type ChangePasswordRequest = {
   newPassword: string;
 };
 
+type ChangeProfilePictureeRequest = {
+  profilePicture: string;
+};
+
+//
+// Todolists
+//
+
 export type TodolistType = {
   id: string;
   description: string;
@@ -42,8 +51,13 @@ export type TodolistType = {
 
 type CreateTodolistRequest = Pick<TodolistType, 'name' | 'description'>;
 type UpdateTodolistRequest = Pick<TodolistType, 'name' | 'description' | 'shared'>;
+type SearchTodolistRequest = Pick<TodolistType, 'name'>;
 
-export type Progress = 'TODO' | 'IN_PROGRESS' | 'DONE'
+//
+// Tasks
+//
+
+export type Progress = 'TODO' | 'IN_PROGRESS' | 'DONE';
 
 export type TaskType = {
   id: string;
@@ -77,10 +91,6 @@ class Api {
     localStorage.removeItem('token');
   }
 
-  /* **************
-    API Methods
-    ************** */
-
   //
   // Auth
   //
@@ -100,10 +110,12 @@ class Api {
       .then(({ access_token }) => this.setHeaderToken(access_token));
 
   changePassword = (data: ChangePasswordRequest): Promise<void> =>
-      this.instance.post('/user/reset-pwd', data);
+    this.instance.post('/user/reset-pwd', data);
 
-  profile = async (): Promise<User> =>
-      (await this.instance.get('/user/profile-tmp-not-secure')).data;
+  changeProfilePicture = (data: ChangeProfilePictureeRequest): Promise<void> =>
+    this.instance.post('/user/profilePicture', data);
+
+  profile = (): Promise<User> => this.instance.get<User>('/user/me').then((res) => res.data);
 
   //
   // TodoList
@@ -118,11 +130,17 @@ class Api {
   getTodoListById = (todolistId: string): Promise<TodolistType> =>
     this.instance.get<TodolistType>(`/todo/${todolistId}`).then((res) => res.data);
 
+  getPublicTodoListById = (todolistId: string): Promise<TodolistType> =>
+    this.instance.get<TodolistType>(`/todo/${todolistId}`).then((res) => res.data);
+
   updateTodoList = (todolistId: string, data: UpdateTodolistRequest): Promise<TodolistType> =>
     this.instance.put<TodolistType>(`/todo/${todolistId}`, data).then((res) => res.data);
 
   deleteTodoList = (todolistId: string): Promise<void> =>
     this.instance.delete<void>(`/todo/${todolistId}`).then((res) => res.data);
+
+  searchTodoLists = (data: SearchTodolistRequest): Promise<Array<TodolistType>> =>
+    this.instance.post<Array<TodolistType>>('/todo/search', data).then((res) => res.data);
 
   //
   // Task
