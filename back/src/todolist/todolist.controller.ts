@@ -46,7 +46,7 @@ router.get(
   }),
 );
 
-router.get('public/:id', async (req, res) => {
+router.get('/public/:id', async (req, res) => {
   const { id } = req.params;
   const list = await prismaService.todoList.findUnique({ where: { id }, select: {
     id: true,
