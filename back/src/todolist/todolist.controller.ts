@@ -10,7 +10,7 @@ import { select as taskSelect } from '../task/task.controller';
 import { CreateTodoListDto, UpdateTodoListDto } from './todolist.dto';
 
 const router = Router();
-const select = {
+export const select = {
   id: true,
   description: true,
   name: true,

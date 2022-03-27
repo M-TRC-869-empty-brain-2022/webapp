@@ -10,6 +10,7 @@ import authRoutes from './auth/auth.controller';
 import userRoutes from './user/user.controller';
 import todoRoutes from './todolist/todolist.controller';
 import taskRoutes from './task/task.controller';
+import searchRoutes from './todolist/search/search.controller';
 import JWTLoginStrategy from './passport/jwt.strategy';
 
 const app = express();
@@ -25,5 +26,6 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/todo', todoRoutes);
 app.use('/task', taskRoutes);
+app.use('/todo/search', searchRoutes);
 
 app.listen(appConstants.PORT, () => console.log(`Server is running on port ${appConstants.PORT}`));
