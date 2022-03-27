@@ -70,9 +70,9 @@ function ChangePassword() {
 
     return <ChangePasswordSection onSubmit={onSubmit}>
         <h3 style={{ margin: 0, marginBottom: '10px' }}>Change your password</h3>
-        <PasswordInput name={"oldPassword"} placeholder={'old password'} onChange={(e) => setPassword(e.target.value)} />
-        <PasswordInput name={"newPassword"} placeholder={'new password'} onChange={(e) => setNewPassword(e.target.value)} />
-        <PasswordInput name={"newPasswordC"} placeholder={'new password confirmation'} onChange={(e) => setNewPasswordC(e.target.value)} />
+        <PasswordInput name={"oldPassword"} type={"password"} placeholder={'old password'} onChange={(e) => setPassword(e.target.value)} />
+        <PasswordInput name={"newPassword"} type={"password"} placeholder={'new password'} onChange={(e) => setNewPassword(e.target.value)} />
+        <PasswordInput name={"newPasswordC"} type={"password"} placeholder={'new password confirmation'} onChange={(e) => setNewPasswordC(e.target.value)} />
         <PasswordSubmit type={"submit"}>Submit</PasswordSubmit>
     </ChangePasswordSection>
 }
@@ -104,7 +104,7 @@ function User() {
             <Role />
             <Sep style={{ height: '40px' }} />
             <ChangePassword />
-            <Sep />
+            <Sep style={{ height: '40px' }} />
             <Logout />
         </Body>
     </StyledUser>
@@ -125,9 +125,9 @@ const ChangePasswordSection = styled.form`
   flex-direction: column;
   justify-content: space-between;
   width: 30%;
-  padding: 30px;
-  border: 1px solid #fc58aa;
-  border-radius: 5px;
+  padding: 30px 0;
+  border-top: 1px solid #fc58aa;
+  border-bottom: 1px solid #fc58aa;
 `
 
 const PasswordInput = styled.input`
