@@ -48,7 +48,14 @@ router.get(
 
 router.get('public/:id', async (req, res) => {
   const { id } = req.params;
-  const list = await prismaService.todoList.findUnique({ where: { id }, select: { ...select } });
+  const list = await prismaService.todoList.findUnique({ where: { id }, select: {
+    id: true,
+    description: true,
+    name: true,
+    shared: true,
+    user: { select: { username: true } },
+    userId: true
+  } });
 
   if (!list) return res.sendStatus(httpStatus.NOT_FOUND);
   if (!list.shared) return res.sendStatus(httpStatus.FORBIDDEN);
