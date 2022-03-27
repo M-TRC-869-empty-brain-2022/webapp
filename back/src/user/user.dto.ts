@@ -1,4 +1,4 @@
-import { IsString, MinLength, MaxLength, IsBase64 } from 'class-validator';
+import { IsString, MinLength, MaxLength, registerDecorator } from 'class-validator';
 
 export class ResetPwdDto {
   @IsString()
@@ -16,9 +16,24 @@ export class ResetPwdDto {
 // 1 MB = 1048576 B
 const max64Length = ((4 * 1048576) / 3 + 3) & ~3;
 
+const CustomIsBase64 = () => (object: any, propertyName: string) => {
+  registerDecorator({
+    name: 'CustomIsBase64',
+    target: object.constructor,
+    propertyName: propertyName,
+    options: { message: 'string must be base64 encoded' },
+    validator: {
+      validate: (incomingBase64: string) =>
+        !!incomingBase64.match(
+          /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i,
+        ),
+    },
+  });
+};
+
 export class UpdateProfilePicture {
   @IsString()
-  @IsBase64()
+  @CustomIsBase64()
   @MinLength(1)
   @MaxLength(max64Length)
   profilePictureBase64: string;

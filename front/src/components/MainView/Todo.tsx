@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {useCallback, useEffect, useState} from "react";
-import {CopyOutline, ShareSocialOutline, TrashOutline} from 'react-ionicons'
+import {CopyOutline, TrashOutline} from 'react-ionicons'
 import Api, {TaskType, Progress, TodolistType} from "src/utils/api";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
@@ -188,7 +188,7 @@ function Todo({ id, name, description, shared, setLists, publicList }: TodoProps
             // @ts-ignore
             toast.error(e.message);
         }
-    }, [id, navigate])
+    }, [id, navigate, setLists])
 
     const shareTodo = useCallback(async () => {
         try {

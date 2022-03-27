@@ -9,7 +9,7 @@ interface BubbleProps {
 function Bubble({ username }: BubbleProps) {
     return <StyledBubble>
         <Link to={`/user/${username}`} style={{ textDecoration: 'none' }}>
-            <Avatar username={username} />
+            <Avatar />
         </Link>
     </StyledBubble>
 }

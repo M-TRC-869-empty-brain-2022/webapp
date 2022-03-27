@@ -1,14 +1,36 @@
 import styled from 'styled-components';
+import {AccessibilityOutline} from "react-ionicons";
+import {useRecoilValue} from "recoil";
+import { user } from "src/recoil/atom";
 
-interface AvatarProps {
-    username: string;
+function Avatar() {
+    const auth = useRecoilValue(user);
+
+    return <Container>
+        {auth?.profilePicture ? (
+            <StyledProfilePicture src={auth?.profilePicture} />
+        ) : (
+            <StyledAvatar>
+                <AccessibilityOutline
+                    color={'white'}
+                    height="100%"
+                    width="100%"
+                />
+            </StyledAvatar>
+        )}
+    </Container>
 }
 
-function Avatar({ username }: AvatarProps) {
-    return <StyledAvatar>
-        { username[0].toUpperCase() }
-    </StyledAvatar>
-}
+
+const StyledProfilePicture = styled.img`
+    width: 100%;
+    height: 100%;
+`
+
+const Container = styled.div`
+    width: 100%;
+  height: 100%;
+`
 
 const StyledAvatar = styled.div`
     height: 100%;
@@ -20,6 +42,8 @@ const StyledAvatar = styled.div`
     color: white;
     font-weight: bold;
     background-color: red;
+  padding: 30%;
+  box-sizing: border-box;
 `
 
 export default Avatar;
