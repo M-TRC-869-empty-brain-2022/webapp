@@ -38,7 +38,9 @@ function Navigation() {
         const user = await Api.profile();
 
         setAuth(user);
-      } catch {}
+      } catch {
+        console.log('HERE')
+      }
     }
 
     fetchAuth();
@@ -59,8 +61,12 @@ function Navigation() {
       <Route path='/list/:list' element={<HomeRoute />}>
         <Route path='/list/:list' element={<Home />} />
       </Route>
+      <Route path='/user/:username' element={<HomeRoute />}>
+        <Route path='/user/:username' element={<User />} />
+      </Route>
 
-      <Route path='/user/:username' element={<User />} />
+      <Route path='/public/:list' element={<Home publicList={true} />} />
+
       <Route path='*' element={<NotFound />} />
     </Routes>
   </Router>

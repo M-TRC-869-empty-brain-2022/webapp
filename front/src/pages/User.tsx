@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
@@ -6,6 +6,7 @@ import Body from '../components/Body';
 import { useSetRecoilState } from 'recoil';
 import { user } from '../recoil/atom';
 import Api from "src/utils/api";
+import {toast} from "react-toastify";
 
 function Logout() {
     const navigate = useNavigate();
@@ -32,20 +33,99 @@ const StyledLogout = styled.div`
     color: red;
 `
 
+function ChangePassword() {
+    const [password, setPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [newPasswordC, setNewPasswordC] = useState('');
+
+    const onSubmit = useCallback(async (e) => {
+        e.preventDefault();
+
+        if (![password, newPassword, newPasswordC].reduce((acc, p) => acc && p.length >= 6 && p.length <= 20, true)) {
+            toast.error("Invalid password length");
+            return;
+        }
+
+        if (newPassword !== newPasswordC) {
+            toast.error("Password does not match");
+            return;
+        }
+
+        if (newPassword === password) {
+            toast.error("Old password is the same as old password");
+            return;
+        }
+
+        try {
+            await Api.changePassword({ oldPassword: password, newPassword: newPassword });
+
+            e.target.reset();
+            toast.success("Password changed!");
+        } catch (e) {
+            // @ts-ignore
+            toast.error(e.message);
+        }
+    }, [password, newPassword, newPasswordC]);
+
+    return <ChangePasswordSection onSubmit={onSubmit}>
+        <h3 style={{ margin: 0, marginBottom: '10px' }}>Change your password</h3>
+        <PasswordInput name={"oldPassword"} placeholder={'old password'} onChange={(e) => setPassword(e.target.value)} />
+        <PasswordInput name={"newPassword"} placeholder={'new password'} onChange={(e) => setNewPassword(e.target.value)} />
+        <PasswordInput name={"newPasswordC"} placeholder={'new password confirmation'} onChange={(e) => setNewPasswordC(e.target.value)} />
+        <PasswordSubmit type={"submit"}>Submit</PasswordSubmit>
+    </ChangePasswordSection>
+}
+
 function User() {
     const { username } = useParams();
 
     return <StyledUser>
         <Header />
-        <Body>
+        <Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: '1', alignItems: 'center' }}>
             <Username>{ username }</Username>
+            <Sep />
+            <ChangePassword />
+            <Sep />
             <Logout />
         </Body>
     </StyledUser>
 }
 
-const StyledUser = styled.div``
+const StyledUser = styled.div`
+display: flex;
+flex-direction: column;
+  height: 100%;
+`
 
 const Username = styled.div``
+
+const ChangePasswordSection = styled.form`
+    display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30%;
+  padding: 30px;
+  border: 1px solid #fc58aa;
+  border-radius: 5px;
+`
+
+const PasswordInput = styled.input`
+margin: 10px 0;
+  padding: 10px;
+`
+
+const PasswordSubmit = styled.button`
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #fc58aa;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+`
+
+const Sep = styled.div`
+height: 10px;
+`
 
 export default User;

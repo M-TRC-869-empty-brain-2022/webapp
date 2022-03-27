@@ -2,20 +2,23 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import Todo from "src/components/MainView/Todo";
 import Sidebar from "src/components/MainView/Sidebar";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {user} from "src/recoil/atom";
 import Api, { TodolistType } from "src/utils/api";
 import {toast} from "react-toastify";
 
-interface HomeProps {}
+interface HomeProps {
+    publicList?: boolean;
+}
 
-function Home(props: HomeProps) {
+function Home({ publicList }: HomeProps) {
     const navigate = useNavigate();
     const auth = useRecoilValue(user);
     const [lists, setLists] = useState<TodolistType[] | undefined>(undefined);
     const { list } = useParams();
+    const [currentList, setCurrentList] = useState<TodolistType | undefined>(undefined);
 
     useEffect(() => {
         const fetchLists = async () => {
@@ -29,17 +32,36 @@ function Home(props: HomeProps) {
             }
         }
 
-        fetchLists();
+        if (auth) {
+            fetchLists();
+        }
     }, [auth])
 
+    useEffect(() => {
+        const getList = async () => {
+            try {
+                const currentList = await Api.getTodoListById(list || '');
+
+                setCurrentList(currentList);
+            } catch (e) {
+                // @ts-ignore
+                toast.error(e.message);
+            }
+        }
+
+        if (list) {
+            getList();
+        }
+    }, [list])
+
     return (
-        <StyledHome >
+        <StyledHome>
             <Header />
             <Interface>
-                <Sidebar lists={lists} setLists={setLists} onChange={(infos) => {
+                {auth && <Sidebar lists={lists} setLists={setLists} onChange={(infos) => {
                     navigate(`/list/${infos.id}`)
-                }} />
-                {list && lists && <Todo {...lists.filter((a) => a.id === list)[0]} />}
+                }} />}
+                {currentList && <Todo setLists={setLists} {...currentList} publicList={publicList} />}
             </Interface>
         </StyledHome>
     );
