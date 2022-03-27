@@ -40,7 +40,7 @@ function Home({ publicList }: HomeProps) {
     useEffect(() => {
         const getList = async () => {
             try {
-                const currentList = await Api.getTodoListById(list || '');
+                const currentList = await (publicList ?  Api.getPublicTodoListById(list || '') :  Api.getTodoListById(list || ''));
 
                 setCurrentList(currentList);
             } catch (e) {
@@ -51,8 +51,10 @@ function Home({ publicList }: HomeProps) {
 
         if (list) {
             getList();
+        } else {
+            setCurrentList(undefined);
         }
-    }, [list])
+    }, [list, publicList])
 
     return (
         <StyledHome>
@@ -62,6 +64,7 @@ function Home({ publicList }: HomeProps) {
                     navigate(`/list/${infos.id}`)
                 }} />}
                 {currentList && <Todo setLists={setLists} {...currentList} publicList={publicList} />}
+                {!currentList && <NoList>Welcome to empty-brain, your todo list manager, feel free to create a todo list by clicking the (+) icon</NoList>}
             </Interface>
         </StyledHome>
     );
@@ -77,6 +80,14 @@ const Interface = styled.div`
   display: flex;
   flex-direction: row;
   flex: 1;
+`
+
+const NoList = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 30px;
 `
 
 export default Home;

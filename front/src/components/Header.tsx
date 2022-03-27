@@ -22,7 +22,7 @@ function SearchBar() {
     }, [navigate, s])
 
     return <StyledSearchBar onSubmit={onSubmit}>
-        <StyledSearchInput placeholder={'search in public todolists...'} onChange={(e) => setS(e.target.value)} />
+        <StyledSearchInput placeholder={'search in public todo lists...'} onChange={(e) => setS(e.target.value)} />
         <SubmitSearch>
             <SearchOutline width={"15px"} height={"15px"} color={"#000000"} />
         </SubmitSearch>

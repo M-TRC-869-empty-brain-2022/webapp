@@ -1,12 +1,17 @@
 import styled from 'styled-components';
+import {AccessibilityOutline} from "react-ionicons";
 
 interface AvatarProps {
-    username: string;
+    username?: string;
 }
 
-function Avatar({ username }: AvatarProps) {
+function Avatar({ }: AvatarProps) {
     return <StyledAvatar>
-        { username[0].toUpperCase() }
+        <AccessibilityOutline
+            color={'white'}
+            height="100%"
+            width="100%"
+        />
     </StyledAvatar>
 }
 
@@ -20,6 +25,8 @@ const StyledAvatar = styled.div`
     color: white;
     font-weight: bold;
     background-color: red;
+  padding: 30%;
+  box-sizing: border-box;
 `
 
 export default Avatar;

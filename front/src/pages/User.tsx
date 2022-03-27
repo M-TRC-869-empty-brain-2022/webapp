@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Body from '../components/Body';
-import { useSetRecoilState } from 'recoil';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
 import { user } from '../recoil/atom';
 import Api from "src/utils/api";
 import {toast} from "react-toastify";
+import ProfilePicture from "src/components/ProfilePicture";
 
 function Logout() {
     const navigate = useNavigate();
@@ -82,7 +83,9 @@ function User() {
     return <StyledUser>
         <Header />
         <Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: '1', alignItems: 'center' }}>
-            <Username>{ username }</Username>
+            <ProfilePicture />
+            <Sep />
+            <Username>@{ username }</Username>
             <Sep />
             <ChangePassword />
             <Sep />
@@ -97,7 +100,10 @@ flex-direction: column;
   height: 100%;
 `
 
-const Username = styled.div``
+const Username = styled.div`
+font-weight: bold;
+  margin: 30px;
+`
 
 const ChangePasswordSection = styled.form`
     display: flex;
