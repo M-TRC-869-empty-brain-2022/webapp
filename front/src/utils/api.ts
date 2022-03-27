@@ -3,10 +3,17 @@ import axios, { AxiosInstance } from 'axios';
 // todo replace with correct var from env.
 const backendUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
-console.log('backend url', backendUrl)
+enum Role {
+  USER = "USER",
+  ADMIN = "ADMIN"
+};
 
-type User = {
+export type User = {
+  createdAt: Date;
   id: string;
+  password: string;
+  role: Role;
+  updatedAt: Date;
   username: string;
 }
 
@@ -95,8 +102,8 @@ class Api {
   changePassword = (data: ChangePasswordRequest): Promise<void> =>
       this.instance.post('/user/reset-pwd', data);
 
-  profile = (): Promise<User> =>
-      this.instance.get('/profile-tmp-not-secure');
+  profile = async (): Promise<User> =>
+      (await this.instance.get('/user/profile-tmp-not-secure')).data;
 
   //
   // TodoList

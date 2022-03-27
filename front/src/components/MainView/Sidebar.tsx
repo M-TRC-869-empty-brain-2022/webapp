@@ -59,7 +59,7 @@ function Sidebar({onChange, lists, setLists}: SidebarProps) {
             <div>loading...</div>
         ) : (
             <>
-                <AddButton onClick={addList}>New list +</AddButton>
+                <AddButton onClick={addList}>+</AddButton>
                 <List>
                     {lists.length === 0 ? (
                         <div>No lists</div>
@@ -77,31 +77,39 @@ const StyledSidebar = styled.div`
   display: flex;
   flex-direction: column;
   width: 155.6px;
-  padding: 30px 10px;
   box-sizing: border-box;
   border-right: 1px solid #e3e3e3;
 `
 
 const List = styled.div`
+  padding: 20px 10px;
   flex: 1;
-
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 `
 
 const AddButton = styled.div`
-  padding: 5px 10px;
-  box-sizing: border-box;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  border: 1px solid #31902c;
+  padding: 5px;
+  //box-sizing: border-box;
+  //display: inline-flex;
+  //justify-content: center;
+  //align-items: center;
+  //align-content: center;
+  //border: 1px solid #31902c;
   user-select: none;
   cursor: pointer;
-  color: #31902c;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  //color: #31902c;
+  //border-radius: 5px;
+  
+  display: inline-block;
+
+  background-color: #fc58aa;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 25px;
+
 `
 
 export default Sidebar;
