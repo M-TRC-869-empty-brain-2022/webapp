@@ -6,7 +6,7 @@ const backendUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 // Auth
 //
 
-enum Role {
+export enum Role {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }
@@ -36,7 +36,7 @@ type ChangeProfilePictureRequest = {
   profilePictureBase64: string;
 };
 
-type AdminChangeRoleRequest = {
+export type AdminChangeRoleRequest = {
   role: Role;
 };
 
