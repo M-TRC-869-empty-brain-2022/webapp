@@ -46,7 +46,7 @@ function Register(props: RegisterProps) {
                 <Input placeholder='confirm password' type={'password'} name={'password'} onChange={(e) => setPasswordC(e.target.value)} />
                 <Button type='submit'>Register</Button>
             </Form>
-            <Link to={'/register'}>Don't have an account? Register.</Link>
+            <Link to={'/login'}>Already have an account? Login.</Link>
         </Modal>
     </StyledRegister>;
 }
