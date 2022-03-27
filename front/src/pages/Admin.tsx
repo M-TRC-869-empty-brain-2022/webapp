@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import { useEffect, useState, useCallback } from "react";
 import { useRecoilValue } from "recoil";
 import { user } from "src/recoil/atom";
-import Api, { User, Role, AdminChangeRoleRequest } from "src/utils/api";
+import Api, { User, Role } from "src/utils/api";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 
