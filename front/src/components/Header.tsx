@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Logo from './Logo';
 import Bubble from './Profile/Bubble';
+import Admin from "./Admin/Bubble";
 import { useRecoilValue } from 'recoil';
 import { user } from '../recoil/atom';
 import {useCallback, useState} from "react";
@@ -56,6 +57,7 @@ function Header(props: HeaderProps) {
         <StyledHeader>
             <Logo />
             <SearchBar />
+            <Admin username={auth?.username || 'error'} />
             <Bubble username={auth?.username || 'error'} />
         </StyledHeader>
     );

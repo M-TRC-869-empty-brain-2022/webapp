@@ -13,6 +13,7 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Register from './pages/Register';
 import User from './pages/User';
+import Admin from './pages/Admin'
 import { user } from './recoil/atom';
 import { ToastContainer } from 'react-toastify';
 import Api from "src/utils/api";
@@ -56,6 +57,9 @@ function Navigation() {
 
       <Route path='/' element={<HomeRoute />}>
         <Route path='/' element={<Home />} />
+      </Route>
+      <Route path='/admin' element={<HomeRoute />}>
+        <Route path='/admin' element={<Admin />} />
       </Route>
       <Route path='/list/:list' element={<HomeRoute />}>
         <Route path='/list/:list' element={<Home />} />
