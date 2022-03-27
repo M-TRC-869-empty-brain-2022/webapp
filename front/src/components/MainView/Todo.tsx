@@ -146,7 +146,7 @@ function Todo({ id, name, description, shared, setLists, publicList }: TodoProps
 
     useEffect(() => {
         const fetchTasks = async () => {
-            const list = await Api.getTodoListById(id);
+            const list = await (publicList ?  Api.getPublicTodoListById :  Api.getTodoListById)(id);
 
             try {
                 setTasks(list.tasks.reverse());
@@ -157,7 +157,7 @@ function Todo({ id, name, description, shared, setLists, publicList }: TodoProps
         }
 
         fetchTasks();
-    }, [id]);
+    }, [id, publicList]);
 
     const addTask = useCallback(() => {
         const name = prompt('Task name:');

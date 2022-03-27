@@ -40,10 +40,13 @@ function Home({ publicList }: HomeProps) {
     useEffect(() => {
         const getList = async () => {
             try {
+                console.log(publicList)
                 const currentList = await (publicList ?  Api.getPublicTodoListById(list || '') :  Api.getTodoListById(list || ''));
 
+                console.log('currentList', currentList)
                 setCurrentList(currentList);
             } catch (e) {
+                console.error('error lol');
                 // @ts-ignore
                 toast.error(e.message);
             }
