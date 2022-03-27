@@ -14,7 +14,7 @@ function Logout() {
     const setAuth = useSetRecoilState(user);
 
     const onLogout = useCallback(() => {
-        setAuth(undefined);
+        setAuth(null);
         Api.logout();
         navigate('/login');
     }, [navigate, setAuth]);

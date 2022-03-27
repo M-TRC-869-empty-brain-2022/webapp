@@ -6,7 +6,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom";
-import {RecoilRoot, useRecoilValue, useSetRecoilState} from 'recoil';
+import {RecoilRoot, useRecoilValue, useRecoilState} from 'recoil';
 
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -31,7 +31,7 @@ function HomeRoute()  {
 }
 
 function Navigation() {
-  const setAuth = useSetRecoilState(user);
+  const [auth, setAuth] = useRecoilState(user);
 
   useEffect(() => {
     const fetchAuth = async () => {
@@ -39,13 +39,13 @@ function Navigation() {
         const user = await Api.profile();
 
         setAuth(user);
-      } catch {}
+      } catch { setAuth(null) }
     }
 
     fetchAuth();
   }, [setAuth])
 
-  return <Router>
+  return auth !== undefined ? <Router>
     <Routes>
       <Route path='/login' element={<AuthRoute />}>
         <Route path='/login' element={<Login />} />
@@ -69,7 +69,7 @@ function Navigation() {
 
       <Route path='*' element={<NotFound />} />
     </Routes>
-  </Router>
+  </Router> : ( <div style={{ padding: '30px' }}>loading...</div> )
 }
 
 function App() {
