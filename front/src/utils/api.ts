@@ -33,7 +33,7 @@ type ChangePasswordRequest = {
 };
 
 type ChangeProfilePictureRequest = {
-  profilePicture: string;
+  profilePictureBase64: string;
 };
 
 type AdminChangeRoleRequest = {

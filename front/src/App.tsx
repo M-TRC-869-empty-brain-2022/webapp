@@ -16,6 +16,7 @@ import User from './pages/User';
 import { user } from './recoil/atom';
 import { ToastContainer } from 'react-toastify';
 import Api from "src/utils/api";
+import Search from "src/pages/Search";
 
 function AuthRoute()  {
   const auth = useRecoilValue(user);
@@ -38,9 +39,7 @@ function Navigation() {
         const user = await Api.profile();
 
         setAuth(user);
-      } catch {
-        console.log('HERE')
-      }
+      } catch {}
     }
 
     fetchAuth();
@@ -66,6 +65,7 @@ function Navigation() {
       </Route>
 
       <Route path='/public/:list' element={<Home publicList={true} />} />
+      <Route path='/search' element={<Search />} />
 
       <Route path='*' element={<NotFound />} />
     </Routes>
