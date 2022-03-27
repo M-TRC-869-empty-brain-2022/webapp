@@ -77,6 +77,20 @@ function ChangePassword() {
     </ChangePasswordSection>
 }
 
+function Role() {
+    const auth = useRecoilValue(user);
+
+    return <StyledRole style={{ backgroundColor: auth?.role === 'ADMIN' ? '#fc0331' : '#45fc03' }}>
+        { auth?.role.toLocaleLowerCase() }
+    </StyledRole>
+}
+
+const StyledRole = styled.div`
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+`
+
 function User() {
     const { username } = useParams();
 
@@ -84,9 +98,11 @@ function User() {
         <Header />
         <Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: '1', alignItems: 'center' }}>
             <ProfilePicture />
+            <Sep style={{ height: '40px' }} />
+            <Username>@{username}</Username>
             <Sep />
-            <Username>@{ username }</Username>
-            <Sep />
+            <Role />
+            <Sep style={{ height: '40px' }} />
             <ChangePassword />
             <Sep />
             <Logout />
@@ -102,7 +118,6 @@ flex-direction: column;
 
 const Username = styled.div`
 font-weight: bold;
-  margin: 30px;
 `
 
 const ChangePasswordSection = styled.form`
