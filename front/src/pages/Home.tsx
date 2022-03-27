@@ -40,7 +40,6 @@ function Home({ publicList }: HomeProps) {
     useEffect(() => {
         const getList = async () => {
             try {
-                console.log(publicList)
                 const currentList = await (publicList ?  Api.getPublicTodoListById(list || '') :  Api.getTodoListById(list || ''));
 
                 setCurrentList(currentList);

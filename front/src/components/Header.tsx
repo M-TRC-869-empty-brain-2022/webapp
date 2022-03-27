@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 import Logo from './Logo';
 import Bubble from './Profile/Bubble';
-import Admin from "./Admin/Bubble";
 import { useRecoilValue } from 'recoil';
 import { user } from '../recoil/atom';
 import {useCallback, useState} from "react";
-import {SearchOutline} from "react-ionicons";
+import {AiOutlineSearch} from "react-icons/ai";
 import {useNavigate} from "react-router-dom";
 
 interface HeaderProps {
@@ -25,7 +24,7 @@ function SearchBar() {
     return <StyledSearchBar onSubmit={onSubmit}>
         <StyledSearchInput placeholder={'search in public todo lists...'} onChange={(e) => setS(e.target.value)} />
         <SubmitSearch>
-            <SearchOutline width={"15px"} height={"15px"} color={"#000000"} />
+            <AiOutlineSearch width={"15px"} height={"15px"} color={"#000000"} />
         </SubmitSearch>
     </StyledSearchBar>
 }
@@ -33,7 +32,7 @@ function SearchBar() {
 const StyledSearchBar = styled.form`
   display: flex;
   flex-direction: row;
-  flex: 0.5;
+  flex: 1.5;
   border: 1px solid #757575;
 `
 
@@ -55,10 +54,13 @@ function Header(props: HeaderProps) {
 
     return (
         <StyledHeader>
-            <Logo />
+            <Flexer>
+                <Logo />
+            </Flexer>
             <SearchBar />
-            <Admin username={auth?.username || 'error'} />
-            <Bubble username={auth?.username || 'error'} />
+            <Flexer>
+                <Bubble username={auth?.username || 'error'} />
+            </Flexer>
         </StyledHeader>
     );
 }
@@ -72,6 +74,10 @@ const StyledHeader = styled.div`
     box-sizing: border-box;
     background-color: white;
     border-bottom: 1px solid #e3e3e3;
+`
+
+const Flexer = styled.div`
+flex: 1;
 `
 
 export default Header;

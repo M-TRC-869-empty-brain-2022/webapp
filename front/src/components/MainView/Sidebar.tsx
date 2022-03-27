@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { useCallback } from "react";
-import { ArrowForwardOutline } from "react-ionicons";
+import { MdOutlineArrowForwardIos } from "react-icons/md";
 import Api, {TodolistType} from "src/utils/api";
+import {MdOutlineAddBox} from 'react-icons/md';
 
 interface SidebarProps {
     onChange: (todo: TodolistType) => void;
@@ -14,7 +15,7 @@ function ListView({ onChange, ...infos }: TodolistType & SidebarProps) {
         <ListName>
             {infos.name}
         </ListName>
-        <ArrowForwardOutline width="10px" height="10px" />
+        <MdOutlineArrowForwardIos width="10px" height="10px" />
     </StyledListView>
 }
 
@@ -59,7 +60,7 @@ function Sidebar({onChange, lists, setLists}: SidebarProps) {
             <div>loading...</div>
         ) : (
             <>
-                <AddButton onClick={addList}>+</AddButton>
+                <AddButton onClick={addList}><MdOutlineAddBox /><div style={{ width: '5px' }} />New list</AddButton>
                 <List>
                     {lists.length === 0 ? (
                         <div>No lists</div>
@@ -76,13 +77,13 @@ const StyledSidebar = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  width: 155.6px;
+  width: 145.6px;
   box-sizing: border-box;
   border-right: 1px solid #e3e3e3;
 `
 
 const List = styled.div`
-  padding: 20px 10px;
+  padding: 10px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -90,26 +91,27 @@ const List = styled.div`
 `
 
 const AddButton = styled.div`
-  padding: 5px;
-  //box-sizing: border-box;
-  //display: inline-flex;
-  //justify-content: center;
-  //align-items: center;
-  //align-content: center;
+  padding: 10px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
   //border: 1px solid #31902c;
   user-select: none;
   cursor: pointer;
   //color: #31902c;
   //border-radius: 5px;
   
-  display: inline-block;
+  //display: inline-block;
 
-  background-color: #fc58aa;
+  background-color: #3d3d3d;
   text-align: center;
   color: white;
   font-weight: bold;
-  font-size: 25px;
-
+  font-size: 15px;
+  margin: 10px;
 `
 
 export default Sidebar;

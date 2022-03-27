@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {AccessibilityOutline} from "react-ionicons";
+import {BiBrain} from "react-icons/bi";
 import {useRecoilValue} from "recoil";
 import { user } from "src/recoil/atom";
 
@@ -11,10 +11,9 @@ function Avatar() {
             <StyledProfilePicture src={auth?.profilePicture} />
         ) : (
             <StyledAvatar>
-                <AccessibilityOutline
+                <BiBrain
                     color={'white'}
-                    height="100%"
-                    width="100%"
+                    style={{ width: '100%', height: '100%' }}
                 />
             </StyledAvatar>
         )}

@@ -4,79 +4,44 @@ import { useEffect, useState, useCallback } from "react";
 import { useRecoilValue } from "recoil";
 import { user } from "src/recoil/atom";
 import Api, { User, Role, AdminChangeRoleRequest } from "src/utils/api";
-
-const isAdminColor = {
-  ADMIN: {
-    name: "admin",
-    color: "#45fc03",
-  },
-  USER: {
-    name: "user",
-    color: "#fc0331",
-  },
-};
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 interface IsAdminProps {
   id: string;
   isAdmin: Role;
   setUsers: React.Dispatch<React.SetStateAction<User[] | undefined>>;
+  username: string;
 }
 
-function IsAdminView({ id, isAdmin, setUsers }: IsAdminProps) {
-  return (
-    <StyledProgress
-      style={{
-        backgroundColor: isAdminColor[isAdmin].color,
-        cursor: "pointer",
-      }}
-      onClick={async () => {
-        let next: Role;
+function IsAdminView({ id, isAdmin, setUsers, username }: IsAdminProps) {
+  return <select onChange={async (e) => {
+    try {
+      const next = e.target.value as Role;
+      await Api.adminChangeUserRole(id, {role: next});
 
-        switch (isAdmin) {
-          case "ADMIN":
-            next = Role.USER;
-            break;
-          case "USER":
-            next = Role.ADMIN;
-            break;
-          default:
-            next = Role.USER;
-            break;
+      setUsers((old) => old?.map((e) => {
+        if (e.id !== id) {
+          return e;
         }
+        e.role = next;
+        return e;
+      }));
 
-        //        let nextRole: AdminChangeRoleRequest & { role: Role };
-        //          ne;
-        await Api.adminChangeUserRole(id, { role: next });
-
-        const currentUser = await Api.adminGetUsers();
-        setUsers(currentUser);
-      }}
-    >
-      {isAdminColor[isAdmin].name}
-    </StyledProgress>
-  );
+      toast.success(`@${username} is now ${next}`)
+    } catch (e) {
+      // @ts-ignore
+      toast.error(e.message);
+    }
+  }}>
+    {["ADMIN", "USER"].sort((a) => a === isAdmin ? -1 : 1).map((r) => <option key={r} value={r}>{r.toLowerCase()}</option>)}
+  </select>
 }
 
-const StyledProgress = styled.div`
-  padding: 10px 30px;
-  color: white;
-  border-radius: 15px;
-  align-items: center;
-  align-self: center;
-  user-select: none;
-`;
-/*
-const Button = styled.button`
-  padding: 10px 30px;
-  background-color: #fc58aa;
-  border: none;
-  color: white;
-  align-self: center;
-  cursor: pointer;
-`;*/
 function Home() {
   const auth = useRecoilValue(user);
   const [users, setUsers] = useState<User[] | undefined>(undefined);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getList = async () => {
@@ -85,23 +50,21 @@ function Home() {
 
         setUsers(currentUser);
       } catch (e) {
-        // @ts-ignore
-        toast.error(e.message);
+        navigate('/');
       }
     };
 
     if (auth) {
       getList();
     }
-  }, [auth]);
+  }, [auth, navigate]);
 
   const onClick = useCallback(async (id) => {
     const deleteTask = async () => {
       try {
         await Api.adminDeleteUser(id);
 
-        const currentUser = await Api.adminGetUsers();
-        setUsers(currentUser);
+        setUsers((old) => old?.filter((e) => e.id !== id));
       } catch (e) {
         // @ts-ignore
         toast.error(e.message);
@@ -115,19 +78,23 @@ function Home() {
     <StyledHome>
       <Header />
       <Interface>
+        <AdminTitle>Admin Zone</AdminTitle>
         {auth && (
           <List>
-            {" "}
-            {users?.map((element) => (
-              <>
+            {users?.map((element, i) => (
+              <UserView style={{ backgroundColor: i % 2 === 0 ? '#fafafa' : 'white' }}>
                 <ListName>{element.username}</ListName>
-                <IsAdminView
-                  id={element.id}
-                  isAdmin={element.role}
-                  setUsers={setUsers}
-                ></IsAdminView>
-                <Button onClick={() => onClick(element.id)}>Delete</Button>
-              </>
+                <UserActions>
+                  <IsAdminView
+                    id={element.id}
+                    isAdmin={element.role}
+                    setUsers={setUsers}
+                    username={element.username}
+                  />
+                  <div style={{ width: '20px' }} />
+                  <Button onClick={() => onClick(element.id)}>Delete user</Button>
+                </UserActions>
+              </UserView>
             ))}{" "}
           </List>
         )}
@@ -144,8 +111,9 @@ const StyledHome = styled.div`
 
 const Interface = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex: 1;
+  padding: 30px;
 `;
 
 const List = styled.div`
@@ -170,5 +138,24 @@ const Button = styled.button`
   align-self: center;
   cursor: pointer;
 `;
+
+const AdminTitle = styled.h1`
+`
+
+const UserView = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+`
+
+const UserActions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+`
 
 export default Home;
