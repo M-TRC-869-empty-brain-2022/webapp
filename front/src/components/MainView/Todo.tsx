@@ -25,12 +25,15 @@ interface ProgressViewProps {
     id: string,
     progress: Progress,
     setTasks: React.Dispatch<React.SetStateAction<TaskType[] | undefined>>;
+    publicList?: boolean;
 }
 
-function ProgressView({ name, id, progress, setTasks }: ProgressViewProps) {
+function ProgressView({ name, id, progress, setTasks, publicList }: ProgressViewProps) {
     return <StyledProgress
-        style={{ backgroundColor: progresses[progress].color }}
+        style={{ backgroundColor: progresses[progress].color, cursor: publicList ? 'default' : 'pointer' }}
         onClick={async () => {
+            if (publicList) return;
+
             let next: Progress;
 
             switch (progress) {
@@ -68,7 +71,6 @@ const StyledProgress = styled.div`
   border-radius: 15px;
   display: flex;
   align-items: center;
-  cursor: pointer;
   user-select: none;
 `
 
@@ -96,7 +98,7 @@ function TaskView({ task: { id, name, progress }, setTasks, publicList }: TaskVi
 
     return <StyledTask>
         <TaskTitle>{name}</TaskTitle>
-        <ProgressView id={id} progress={progress} name={name} setTasks={setTasks} />
+        <ProgressView id={id} progress={progress} name={name} setTasks={setTasks} publicList={publicList} />
         {!publicList && <TrashOutline
             color={'#00000'}
             height="25px"
