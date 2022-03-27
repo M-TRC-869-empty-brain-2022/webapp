@@ -24,19 +24,14 @@ function Login(props: LoginProps) {
         }
 
         try {
-            const user = await Api.login({username, password});
+            await Api.login({username, password});
 
-            console.log(user);
+            setAuth(await Api.profile());
         } catch (e) {
             // @ts-ignore
             toast.error(e.message);
             return;
         }
-
-        setAuth({
-            username: username,
-            id: username,
-        })
     }, [username, password, setAuth])
 
     return <StyledLogin>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,7 +6,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom";
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import {RecoilRoot, useRecoilValue, useSetRecoilState} from 'recoil';
 
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -15,6 +15,7 @@ import Register from './pages/Register';
 import User from './pages/User';
 import { user } from './recoil/atom';
 import { ToastContainer } from 'react-toastify';
+import Api from "src/utils/api";
 
 function AuthRoute()  {
   const auth = useRecoilValue(user);
@@ -29,6 +30,20 @@ function HomeRoute()  {
 }
 
 function Navigation() {
+  const setAuth = useSetRecoilState(user);
+
+  useEffect(() => {
+    const fetchAuth = async () => {
+      try {
+        const user = await Api.profile();
+
+        setAuth(user);
+      } catch {}
+    }
+
+    fetchAuth();
+  }, [setAuth])
+
   return <Router>
     <Routes>
       <Route path='/login' element={<AuthRoute />}>

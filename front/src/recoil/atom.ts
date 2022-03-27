@@ -1,9 +1,5 @@
 import { atom } from 'recoil';
-
-interface User {
-    username: string;
-    id: string;
-}
+import {User} from "src/utils/api";
 
 export const user = atom<User | undefined>({
     key: 'user',

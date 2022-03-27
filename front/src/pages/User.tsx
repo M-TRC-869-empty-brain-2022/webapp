@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Body from '../components/Body';
 import { useSetRecoilState } from 'recoil';
 import { user } from '../recoil/atom';
+import Api from "src/utils/api";
 
 function Logout() {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ function Logout() {
 
     const onLogout = useCallback(() => {
         setAuth(undefined);
+        Api.logout();
         navigate('/login');
     }, [navigate, setAuth]);
     
