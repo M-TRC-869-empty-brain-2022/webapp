@@ -32,8 +32,12 @@ type ChangePasswordRequest = {
   newPassword: string;
 };
 
-type ChangeProfilePictureeRequest = {
+type ChangeProfilePictureRequest = {
   profilePicture: string;
+};
+
+type AdminChangeRoleRequest = {
+  role: Role;
 };
 
 //
@@ -112,7 +116,7 @@ class Api {
   changePassword = (data: ChangePasswordRequest): Promise<void> =>
     this.instance.post('/user/reset-pwd', data);
 
-  changeProfilePicture = (data: ChangeProfilePictureeRequest): Promise<void> =>
+  changeProfilePicture = (data: ChangeProfilePictureRequest): Promise<void> =>
     this.instance.post('/user/profilePicture', data);
 
   profile = (): Promise<User> => this.instance.get<User>('/user/me').then((res) => res.data);
@@ -154,6 +158,19 @@ class Api {
 
   deleteTask = (taskId: string): Promise<void> =>
     this.instance.delete<void>(`/task/${taskId}`).then((res) => res.data);
+
+  //
+  // Admin
+  //
+
+  adminGetUsers = (): Promise<Array<User>> =>
+    this.instance.get<Array<User>>('/admin/user').then((res) => res.data);
+
+  adminDeleteUser = (userId: string): Promise<void> =>
+    this.instance.delete(`/admin/user/${userId}`).then((res) => res.data);
+
+  adminChangeUserRole = (userId: string, data: AdminChangeRoleRequest): Promise<void> =>
+    this.instance.post(`/admin/user/${userId}`, data).then((res) => res.data);
 }
 
 export default new Api();
