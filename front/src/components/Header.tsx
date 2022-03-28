@@ -1,15 +1,9 @@
 import styled from 'styled-components';
 import Logo from './Logo';
 import Bubble from './Profile/Bubble';
-import { useRecoilValue } from 'recoil';
-import { user } from '../recoil/atom';
 import {useCallback, useState} from "react";
 import {AiOutlineSearch} from "react-icons/ai";
 import {useNavigate} from "react-router-dom";
-
-interface HeaderProps {
-
-}
 
 function SearchBar() {
     const navigate = useNavigate();
@@ -49,9 +43,7 @@ const SubmitSearch = styled.button`
   border: none;
 `
 
-function Header(props: HeaderProps) {
-    const auth = useRecoilValue(user);
-
+function Header() {
     return (
         <StyledHeader>
             <Flexer>
@@ -59,7 +51,7 @@ function Header(props: HeaderProps) {
             </Flexer>
             <SearchBar />
             <Flexer>
-                <Bubble username={auth?.username || 'error'} />
+                <Bubble />
             </Flexer>
         </StyledHeader>
     );

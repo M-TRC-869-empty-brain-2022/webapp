@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Body from '../components/Body';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
@@ -92,14 +92,14 @@ const StyledRole = styled.div`
 `
 
 function User() {
-    const { username } = useParams();
+    const auth = useRecoilValue(user);
 
     return <StyledUser>
         <Header />
         <Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: '1', alignItems: 'center' }}>
             <ProfilePicture />
             <Sep style={{ height: '40px' }} />
-            <Username>@{username}</Username>
+            <Username>@{auth?.username}</Username>
             <Sep />
             <Role />
             <Sep style={{ height: '40px' }} />

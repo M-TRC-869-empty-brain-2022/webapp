@@ -64,8 +64,8 @@ function Navigation() {
       <Route path='/list/:list' element={<HomeRoute />}>
         <Route path='/list/:list' element={<Home />} />
       </Route>
-      <Route path='/user/:username' element={<HomeRoute />}>
-        <Route path='/user/:username' element={<User />} />
+      <Route path='/user/me' element={<HomeRoute />}>
+        <Route path='/user/me' element={<User />} />
       </Route>
 
       <Route path='/public/:list' element={<Home publicList={true} />} />

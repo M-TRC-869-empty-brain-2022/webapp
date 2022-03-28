@@ -5,11 +5,7 @@ import {useRecoilValue} from "recoil";
 import {user} from "src/recoil/atom";
 import {IoSettingsSharp} from "react-icons/io5";
 
-interface BubbleProps {
-    username: string;
-}
-
-function Bubble({ username }: BubbleProps) {
+function Bubble() {
     const auth = useRecoilValue(user);
 
     if (auth !== null && auth !== undefined)
@@ -20,7 +16,7 @@ function Bubble({ username }: BubbleProps) {
             </AdminSettings>
         </Link>}
         <StyledBubble>
-            <Link to={`/user/${username}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/user/me`} style={{ textDecoration: 'none' }}>
                 <Avatar />
             </Link>
         </StyledBubble>
