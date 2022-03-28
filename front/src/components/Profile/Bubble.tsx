@@ -27,7 +27,9 @@ function Bubble({ username }: BubbleProps) {
     </StyledBubbleContainer>
 
     if (auth === null) {
-        return <Link to={`/login`} style={{textDecoration: 'none', color: '#3d3d3d'}}><SignUp>Login / Sign Up</SignUp></Link>
+        return <SignUpContainer>
+            <Link to={`/login`} style={{textDecoration: 'none', color: '#3d3d3d'}}><SignUp>Login / Sign Up</SignUp></Link>
+        </SignUpContainer>
     }
 
     return null;
@@ -44,6 +46,13 @@ const StyledBubble = styled.div`
     overflow: hidden;
     width: 30px;
     height: 30px;
+`
+
+const SignUpContainer = styled.div`
+    display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
 `
 
 const SignUp = styled.div`
