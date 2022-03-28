@@ -27,6 +27,8 @@ const StyledListView = styled.div`
   justify-content: space-between;
   width: 100%;
   box-sizing: border-box;
+  white-space: nowrap;
+  align-items: center;
 `
 
 const ListName = styled.div`
