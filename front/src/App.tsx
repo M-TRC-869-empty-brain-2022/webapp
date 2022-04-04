@@ -6,13 +6,14 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom";
-import {RecoilRoot, useRecoilValue, useSetRecoilState} from 'recoil';
+import {RecoilRoot, useRecoilValue, useRecoilState} from 'recoil';
 
 import Login from './pages/Login';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Register from './pages/Register';
 import User from './pages/User';
+import Admin from './pages/Admin'
 import { user } from './recoil/atom';
 import { ToastContainer } from 'react-toastify';
 import Api from "src/utils/api";
@@ -31,7 +32,7 @@ function HomeRoute()  {
 }
 
 function Navigation() {
-  const setAuth = useSetRecoilState(user);
+  const [auth, setAuth] = useRecoilState(user);
 
   useEffect(() => {
     const fetchAuth = async () => {
@@ -39,13 +40,13 @@ function Navigation() {
         const user = await Api.profile();
 
         setAuth(user);
-      } catch {}
+      } catch { setAuth(null) }
     }
 
     fetchAuth();
   }, [setAuth])
 
-  return <Router>
+  return auth !== undefined ? <Router>
     <Routes>
       <Route path='/login' element={<AuthRoute />}>
         <Route path='/login' element={<Login />} />
@@ -57,11 +58,14 @@ function Navigation() {
       <Route path='/' element={<HomeRoute />}>
         <Route path='/' element={<Home />} />
       </Route>
+      <Route path='/admin' element={<HomeRoute />}>
+        <Route path='/admin' element={<Admin />} />
+      </Route>
       <Route path='/list/:list' element={<HomeRoute />}>
         <Route path='/list/:list' element={<Home />} />
       </Route>
-      <Route path='/user/:username' element={<HomeRoute />}>
-        <Route path='/user/:username' element={<User />} />
+      <Route path='/user/me' element={<HomeRoute />}>
+        <Route path='/user/me' element={<User />} />
       </Route>
 
       <Route path='/public/:list' element={<Home publicList={true} />} />
@@ -69,7 +73,7 @@ function Navigation() {
 
       <Route path='*' element={<NotFound />} />
     </Routes>
-  </Router>
+  </Router> : ( <div style={{ padding: '30px' }}>loading...</div> )
 }
 
 function App() {

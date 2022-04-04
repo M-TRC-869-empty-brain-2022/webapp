@@ -6,7 +6,7 @@ const backendUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 // Auth
 //
 
-enum Role {
+export enum Role {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }
@@ -36,7 +36,7 @@ type ChangeProfilePictureRequest = {
   profilePictureBase64: string;
 };
 
-type AdminChangeRoleRequest = {
+export type AdminChangeRoleRequest = {
   role: Role;
 };
 
@@ -135,7 +135,7 @@ class Api {
     this.instance.get<TodolistType>(`/todo/${todolistId}`).then((res) => res.data);
 
   getPublicTodoListById = (todolistId: string): Promise<TodolistType> =>
-    this.instance.get<TodolistType>(`/todo/${todolistId}`).then((res) => res.data);
+    this.instance.get<TodolistType>(`/todo/public/${todolistId}`).then((res) => res.data);
 
   updateTodoList = (todolistId: string, data: UpdateTodolistRequest): Promise<TodolistType> =>
     this.instance.put<TodolistType>(`/todo/${todolistId}`, data).then((res) => res.data);

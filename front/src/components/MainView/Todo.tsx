@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {useCallback, useEffect, useState} from "react";
-import {CopyOutline, ShareSocialOutline, TrashOutline} from 'react-ionicons'
+import { IoTrashOutline, IoCopyOutline } from 'react-icons/io5'
+import { MdPublic, MdPublicOff } from 'react-icons/md'
 import Api, {TaskType, Progress, TodolistType} from "src/utils/api";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
@@ -99,12 +100,10 @@ function TaskView({ task: { id, name, progress }, setTasks, publicList }: TaskVi
     return <StyledTask>
         <TaskTitle>{name}</TaskTitle>
         <ProgressView id={id} progress={progress} name={name} setTasks={setTasks} publicList={publicList} />
-        {!publicList && <TrashOutline
+        {!publicList && <IoTrashOutline
             color={'#00000'}
-            height="25px"
-            width="25px"
             onClick={onClick}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', width: '20px', height: '20px' }}
         />}
     </StyledTask>
 }
@@ -114,6 +113,7 @@ const StyledTask = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #e3e3e3;
   
   > *:not(:last-child) {
@@ -146,7 +146,7 @@ function Todo({ id, name, description, shared, setLists, publicList }: TodoProps
 
     useEffect(() => {
         const fetchTasks = async () => {
-            const list = await Api.getTodoListById(id);
+            const list = await (publicList ?  Api.getPublicTodoListById :  Api.getTodoListById)(id);
 
             try {
                 setTasks(list.tasks.reverse());
@@ -157,7 +157,7 @@ function Todo({ id, name, description, shared, setLists, publicList }: TodoProps
         }
 
         fetchTasks();
-    }, [id]);
+    }, [id, publicList]);
 
     const addTask = useCallback(() => {
         const name = prompt('Task name:');
@@ -188,7 +188,7 @@ function Todo({ id, name, description, shared, setLists, publicList }: TodoProps
             // @ts-ignore
             toast.error(e.message);
         }
-    }, [id, navigate])
+    }, [id, navigate, setLists])
 
     const shareTodo = useCallback(async () => {
         try {
@@ -204,7 +204,7 @@ function Todo({ id, name, description, shared, setLists, publicList }: TodoProps
     return <StyledTodo>
         <TodoHeader>
             <TodoMeta>
-                <TodoTitle>{name}</TodoTitle>
+                <TodoTitle>{ !_shared ? <MdPublicOff style={{ width: '20px' }}  /> : <MdPublic style={{ width: '20px' }} /> } <div style={{ width: '15px', display: 'inline-block' }} /> {name}</TodoTitle>
                 <TodoDescription>{description}</TodoDescription>
                 <TodoInfos>
                     <TodoProgress>
@@ -221,21 +221,23 @@ function Todo({ id, name, description, shared, setLists, publicList }: TodoProps
                 </TodoInfos>
             </TodoMeta>
             {!publicList && <TodoAction>
-                <TrashOutline
-                    color={'#00000'}
-                    height="25px"
-                    width="25px"
+                <IoTrashOutline
+                    color={'red'}
                     onClick={deleteTodo}
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', width: '25px', height: '25px' }}
                 />
-                <ShareButton onClick={shareTodo}>{ !_shared ? 'Make public' : 'Make private' }</ShareButton>
+                <ShareButton onClick={shareTodo}>
+                    { !_shared ? <MdPublicOff /> : <MdPublic /> }
+                    <div style={{ width: '5px' }} />
+                    { !_shared ? 'Make public' : 'Make private' }
+                </ShareButton>
                 {_shared && <CopyPublicList
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                         navigator.clipboard.writeText(`${window.location.hostname}/public/${id}`);
                         toast("Public link copied on clipboard");
                     }}>
-                    <CopyOutline
+                    <IoCopyOutline
                         color={'#00000'}
                         height="15px"
                         width="15px"
@@ -264,6 +266,9 @@ const StyledTodo = styled.div`
 
 const TodoTitle = styled.h1`
     margin-top: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `
 
 const TodoDescription = styled.p`
@@ -318,8 +323,11 @@ const ShareButton = styled.div`
   text-align: center;
   border: 1px solid black;
   border-radius: 5px;
-  display: inline-block;
   margin-left: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `
 
 const CopyPublicList = styled.div`

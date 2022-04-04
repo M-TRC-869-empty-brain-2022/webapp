@@ -1,4 +1,4 @@
-import { useRecoilState } from "recoil";
+import {useSetRecoilState} from "recoil";
 import {user} from "src/recoil/atom";
 import styled from "styled-components";
 import Avatar from "src/components/Profile/Avatar";
@@ -7,7 +7,7 @@ import {toast} from "react-toastify";
 import Api from "src/utils/api";
 
 function ProfilePicture() {
-    const [auth, setAuth] = useRecoilState(user);
+    const setAuth = useSetRecoilState(user);
 
     const onClick = useCallback(() => {
         const input = document.createElement('input');
@@ -54,10 +54,10 @@ function ProfilePicture() {
         }
 
         input.click();
-    }, [])
+    }, [setAuth])
 
     return <StyledProfilePictureContainer onClick={onClick}>
-        {auth?.profilePicture ?  <StyledProfilePicture src={auth?.profilePicture} /> : <Avatar />}
+        <Avatar />
     </StyledProfilePictureContainer>
 }
 
@@ -67,11 +67,6 @@ const StyledProfilePictureContainer = styled.div`
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-`
-
-const StyledProfilePicture = styled.img`
-  width: 100%;
-  height: 100%;
 `
 
 export default ProfilePicture;

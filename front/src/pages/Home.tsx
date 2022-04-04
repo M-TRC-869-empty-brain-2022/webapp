@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import Todo from "src/components/MainView/Todo";
 import Sidebar from "src/components/MainView/Sidebar";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {user} from "src/recoil/atom";

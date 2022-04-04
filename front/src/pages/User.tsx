@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Body from '../components/Body';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
@@ -14,7 +14,7 @@ function Logout() {
     const setAuth = useSetRecoilState(user);
 
     const onLogout = useCallback(() => {
-        setAuth(undefined);
+        setAuth(null);
         Api.logout();
         navigate('/login');
     }, [navigate, setAuth]);
@@ -70,25 +70,41 @@ function ChangePassword() {
 
     return <ChangePasswordSection onSubmit={onSubmit}>
         <h3 style={{ margin: 0, marginBottom: '10px' }}>Change your password</h3>
-        <PasswordInput name={"oldPassword"} placeholder={'old password'} onChange={(e) => setPassword(e.target.value)} />
-        <PasswordInput name={"newPassword"} placeholder={'new password'} onChange={(e) => setNewPassword(e.target.value)} />
-        <PasswordInput name={"newPasswordC"} placeholder={'new password confirmation'} onChange={(e) => setNewPasswordC(e.target.value)} />
+        <PasswordInput name={"oldPassword"} type={"password"} placeholder={'old password'} onChange={(e) => setPassword(e.target.value)} />
+        <PasswordInput name={"newPassword"} type={"password"} placeholder={'new password'} onChange={(e) => setNewPassword(e.target.value)} />
+        <PasswordInput name={"newPasswordC"} type={"password"} placeholder={'new password confirmation'} onChange={(e) => setNewPasswordC(e.target.value)} />
         <PasswordSubmit type={"submit"}>Submit</PasswordSubmit>
     </ChangePasswordSection>
 }
 
+function Role() {
+    const auth = useRecoilValue(user);
+
+    return <StyledRole style={{ backgroundColor: auth?.role === 'ADMIN' ? '#fc0331' : '#45fc03' }}>
+        { auth?.role.toLocaleLowerCase() }
+    </StyledRole>
+}
+
+const StyledRole = styled.div`
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+`
+
 function User() {
-    const { username } = useParams();
+    const auth = useRecoilValue(user);
 
     return <StyledUser>
         <Header />
         <Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: '1', alignItems: 'center' }}>
             <ProfilePicture />
+            <Sep style={{ height: '40px' }} />
+            <Username>@{auth?.username}</Username>
             <Sep />
-            <Username>@{ username }</Username>
-            <Sep />
+            <Role />
+            <Sep style={{ height: '40px' }} />
             <ChangePassword />
-            <Sep />
+            <Sep style={{ height: '40px' }} />
             <Logout />
         </Body>
     </StyledUser>
@@ -102,7 +118,6 @@ flex-direction: column;
 
 const Username = styled.div`
 font-weight: bold;
-  margin: 30px;
 `
 
 const ChangePasswordSection = styled.form`
@@ -110,9 +125,9 @@ const ChangePasswordSection = styled.form`
   flex-direction: column;
   justify-content: space-between;
   width: 30%;
-  padding: 30px;
-  border: 1px solid #fc58aa;
-  border-radius: 5px;
+  padding: 30px 0;
+  border-top: 1px solid #fc58aa;
+  border-bottom: 1px solid #fc58aa;
 `
 
 const PasswordInput = styled.input`
