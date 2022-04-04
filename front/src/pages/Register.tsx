@@ -15,13 +15,34 @@ function Register(props: RegisterProps) {
     const onSubmit = useCallback(async (e) => {
         e.preventDefault();
 
-        if (username.length > 20 || username.length < 6 || password.length > 20 || password.length < 6) {
-            toast.error("Your username and your password length should be contained between 6 and 20 characters");
+        if (username.length > 20 || username.length < 6 || password.length > 32 || password.length < 8) {
+            toast.error("Your username and your password length should be contained between 8 and 32 characters");
             return;
         }
 
         if (password !== passwordC) {
             toast.error("The password and the confirmation doesn't match");
+            return;
+        }
+
+        const noMatch = (regex: string, message: string) => {
+            if (!password.match(regex)) {
+                return `You must include at least one ${message}`;
+            }
+            return undefined;
+        }
+
+        const verifications = [
+            noMatch('[0-9]+', 'digit'),
+            noMatch('[a-z]+', 'lowercase char'),
+            noMatch('[A-Z]+', 'uppercase char'),
+            noMatch('[*.!@$%^&(){}[\\]:;<>,.?/~_+\\-=|]+', 'special char (*.!@$%^&(){}[\\]:;<>,.?/~_+\\-=|)')
+        ];
+
+        const failed = verifications.reduce((acc, v) => (acc || v), undefined);
+
+        if (failed) {
+            toast.error(failed);
             return;
         }
 

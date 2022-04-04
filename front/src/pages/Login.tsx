@@ -18,8 +18,8 @@ function Login(props: LoginProps) {
     const onSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(async (e) => {
         e.preventDefault();
 
-        if (username.length > 20 || username.length < 6 || password.length > 20 || password.length < 6) {
-            toast.error("Your username and your password length should be contained between 6 and 20 characters");
+        if (username.length > 20 || username.length < 6 || password.length > 32 || password.length < 6) {
+            toast.error("Your username and your password length should be contained between 6 and 32 characters");
             return;
         }
 
